@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api/client';
+import { useModal } from '../context/ModalContext';
 import { Save, Calendar, X, ShieldCheck, Clock, CheckCircle, Loader2, Trophy } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -36,6 +37,7 @@ export const PredictionForm = ({ poolId, initialData, onCancel, readOnly = false
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
+  const { show } = useModal();
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -105,10 +107,11 @@ export const PredictionForm = ({ poolId, initialData, onCancel, readOnly = false
   const handleAction = async (newStatus: 'APPROVED' | 'REJECTED') => {
     try {
       await api.patch(`/tickets/${initialData.id}/status`, { status: newStatus });
-      alert(`Ticket ${newStatus === 'APPROVED' ? 'aprobado' : 'rechazado'} con éxito`);
+      show(`Ticket ${newStatus === 'APPROVED' ? 'aprobado' : 'rechazado'} con éxito`, "success");
       onCancel();
     } catch (error) {
       console.error("Error al actualizar estado", error);
+      show("Error al actualizar el estado del ticket", "error");
     }
   };
 
@@ -123,7 +126,7 @@ export const PredictionForm = ({ poolId, initialData, onCancel, readOnly = false
     );
 
     if (incompleteMatch) {
-      alert(`Te faltan pronósticos por completar. Revisa la fase: ${incompleteMatch.phase}`);
+      show(`Te faltan pronósticos por completar. Revisa la fase: ${incompleteMatch.phase}`, "error");
       setActivePhase(incompleteMatch.phase as Phase);
       if (incompleteMatch.phase === "Grupos") setActiveRound(incompleteMatch.round);
       return;

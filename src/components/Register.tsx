@@ -1,9 +1,38 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useModal } from '../context/ModalContext';
 import { Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+
+// Traduce errores de Firebase a mensajes amigables
+const getFirebaseErrorMessage = (error: any): string => {
+  const errorCode = error.code || error.message || '';
+  
+  if (errorCode.includes('auth/email-already-in-use')) {
+    return 'Este email ya está registrado. Intenta iniciar sesión o usa otro email.';
+  }
+  
+  if (errorCode.includes('auth/weak-password')) {
+    return 'La contraseña debe tener al menos 6 caracteres.';
+  }
+  
+  if (errorCode.includes('auth/invalid-email')) {
+    return 'El email no es válido. Verifica que esté bien escrito.';
+  }
+  
+  if (errorCode.includes('auth/operation-not-allowed')) {
+    return 'El registro de email/contraseña no está habilitado. Contacta al administrador.';
+  }
+  
+  if (errorCode.includes('auth/network-request-failed')) {
+    return 'Error de conexión. Verifica tu internet e intenta de nuevo.';
+  }
+  
+  return 'No pudimos registrarte. Intenta de nuevo.';
+};
 
 export const Register = ({ onBack }: { onBack: () => void }) => {
   const { registerWithEmail } = useAuth();
+  const { show } = useModal();
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +43,7 @@ export const Register = ({ onBack }: { onBack: () => void }) => {
       await registerWithEmail(formData.email, formData.password, formData.name);
       // Al registrarse con éxito, el AuthContext cambia y App.tsx redirige solo
     } catch (error: any) {
-      alert(error.message || "Error al registrar usuario");
+      show(getFirebaseErrorMessage(error), "error");
     } finally {
       setLoading(false);
     }

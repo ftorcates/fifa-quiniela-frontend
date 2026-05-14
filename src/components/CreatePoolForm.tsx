@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { api } from '../api/client';
+import { useModal } from '../context/ModalContext';
 import { Trophy, Hash, DollarSign, Gift, ArrowRight, CheckCircle, Edit3 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,6 +11,7 @@ interface CreatePoolFormProps {
 
 export const CreatePoolForm = ({ onSuccess, onBack }: CreatePoolFormProps) => {
     const { user } = useAuth();
+    const { show } = useModal();
   const [formData, setFormData] = useState({
     title: '',
     shortCode: '',
@@ -35,7 +37,7 @@ export const CreatePoolForm = ({ onSuccess, onBack }: CreatePoolFormProps) => {
       });
     } catch (error) {
       console.error("Error al crear la quiniela", error);
-      alert("Hubo un error. Revisa que el Código Corto no esté duplicado.");
+      show("Hubo un error. Revisa que el Código Corto no esté duplicado.", "error");
     } finally {
       setLoading(false);
     }

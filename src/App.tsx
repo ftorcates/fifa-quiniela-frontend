@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSimulatorData } from './hooks/useSimulatorData';
+import { useModal } from './context/ModalContext';
 import { Leaderboard } from './components/Leaderboard';
 import { PredictionForm } from './components/PredictionForm';
 import { 
@@ -57,6 +58,7 @@ const SimulatorViewWithData = ({ poolId }: { poolId: string }) => {
 
 function App() {
   const { user, loading, logout } = useAuth();
+  const { show } = useModal();
   const [view, setView] = useState<'lobby' | 'dashboard' | 'create'>('lobby');
   const [poolId, setPoolId] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
@@ -81,7 +83,7 @@ function App() {
   };
 
   const handleFindPool = async (code: string) => {
-    if (!code) return alert("Por favor ingresa un código");
+    if (!code) return show("Por favor ingresa un código", "error");
   
     try {
       // Llamamos al endpoint que busca por shortCode (debes tenerlo en NestJS)
@@ -93,7 +95,7 @@ function App() {
       setView('dashboard');
     } catch (error) {
       console.error(error);
-      alert("No encontramos ninguna quiniela con ese código. ¡Verifícalo!");
+      show("No encontramos ninguna quiniela con ese código. ¡Verífícalo!", "error");
     }
   };
 
