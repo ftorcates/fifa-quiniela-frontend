@@ -6,6 +6,39 @@ import { Register } from './Register';
 import { FcGoogle } from 'react-icons/fc';
 import { FaApple } from 'react-icons/fa';
 
+// Traduce errores de Firebase a mensajes amigables
+const getFirebaseErrorMessage = (error: any): string => {
+  const errorCode = error.code || error.message || '';
+  
+  if (errorCode.includes('auth/invalid-credential') || 
+      errorCode.includes('INVALID_LOGIN_CREDENTIALS') ||
+      errorCode.includes('auth/invalid-login-credentials')) {
+    return 'Email o contraseña incorrectos. Verifica y intenta de nuevo.';
+  }
+  
+  if (errorCode.includes('auth/user-not-found')) {
+    return 'Este email no está registrado. ¿Deseas registrarte?';
+  }
+  
+  if (errorCode.includes('auth/wrong-password')) {
+    return 'Contraseña incorrecta. Intenta de nuevo.';
+  }
+  
+  if (errorCode.includes('auth/too-many-requests')) {
+    return 'Demasiados intentos fallidos. Intenta más tarde.';
+  }
+  
+  if (errorCode.includes('auth/invalid-email')) {
+    return 'El email no es válido. Verifica que esté bien escrito.';
+  }
+  
+  if (errorCode.includes('auth/network-request-failed')) {
+    return 'Error de conexión. Verifica tu internet e intenta de nuevo.';
+  }
+  
+  return 'No pudimos iniciar sesión. Intenta de nuevo.';
+};
+
 export const Login = () => {
   const { loginWithGoogle, loginWithEmail } = useAuth();
   const { show } = useModal();
@@ -19,9 +52,9 @@ export const Login = () => {
       setIsLoggingIn(true);
       await loginWithGoogle();
       // El AuthContext detectará el cambio y el App.tsx hará la redirección
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error en login con Google:", error);
-      show("No pudimos iniciar sesión con Google. Inténtalo de nuevo.", "error");
+      show(getFirebaseErrorMessage(error), "error");
     } finally {
       setIsLoggingIn(false);
     }
@@ -41,17 +74,7 @@ export const Login = () => {
       // El AuthContext detectará el cambio y el App.tsx hará la redirección
     } catch (error: any) {
       console.error("Error en login con email:", error);
-      
-      // Mensajes más amigables basados en el error
-      if (error.code === 'auth/invalid-login-credentials' || error.message?.includes('INVALID_LOGIN_CREDENTIALS')) {
-        show('Email o contraseña incorrectos. Verifica y intenta de nuevo.', "error");
-      } else if (error.code === 'auth/user-not-found') {
-        show('Este email no está registrado. ¿Deseas registrarte?', "error");
-      } else if (error.code === 'auth/wrong-password') {
-        show('Contraseña incorrecta. Intenta de nuevo.', "error");
-      } else {
-        show(error.message || "No pudimos iniciar sesión. Intenta de nuevo.", "error");
-      }
+      show(getFirebaseErrorMessage(error), "error");
     } finally {
       setIsLoggingIn(false);
     }

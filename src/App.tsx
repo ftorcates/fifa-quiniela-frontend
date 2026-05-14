@@ -93,7 +93,6 @@ function App() {
       // Si la encuentra, seteamos el ID real para el Dashboard y cambiamos la vista
       setPoolId(pool.id);
       setView('dashboard');
-      show("¡Quiniela encontrada! Bienvenido.", "success");
     } catch (error) {
       console.error(error);
       show("No encontramos ninguna quiniela con ese código. ¡Verífícalo!", "error");
