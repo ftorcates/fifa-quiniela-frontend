@@ -152,7 +152,7 @@ export const SimulatorView = ({
         </div>
   
         {/* PANEL DERECHO: Leaderboard Simulado */}
-        <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white h-fit sticky top-24 shadow-2xl max-h-[600px] overflow-y-auto">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white h-fit sticky top-24 shadow-2xl overflow-y-auto">
           <h3 className="text-xl font-black italic mb-6 border-b border-white/10 pb-4 uppercase tracking-tighter flex items-center gap-2 sticky top-0 bg-gradient-to-br from-slate-900 to-slate-800 py-2">
             <TrendingUp size={20} /> Leaderboard {modifiedCount > 0 ? '(Simulado)' : ''}
           </h3>
@@ -189,7 +189,7 @@ export const SimulatorView = ({
                         <p className="font-bold text-sm text-white leading-tight">
                           {row.participant?.name || 'Usuario'}
                         </p>
-                        <p className="text-xs text-slate-400">{row.participant?.email || ''}</p>
+                        <p className="text-xs text-slate-400">Ticket: {row.id.split('-')[0]}...</p>
                       </div>
                     </div>
                   </div>
