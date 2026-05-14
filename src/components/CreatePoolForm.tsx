@@ -11,6 +11,7 @@ interface CreatePoolFormProps {
 
 export const CreatePoolForm = ({ onSuccess, onBack }: CreatePoolFormProps) => {
     const { user } = useAuth();
+    const { show } = useModal();
   const [formData, setFormData] = useState({
     title: '',
     shortCode: '',
@@ -22,7 +23,6 @@ export const CreatePoolForm = ({ onSuccess, onBack }: CreatePoolFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { show } = useModal();
     setLoading(true);
     try {
         // Expandimos el formData para incluir el ownerId necesario

@@ -58,6 +58,7 @@ const SimulatorViewWithData = ({ poolId }: { poolId: string }) => {
 
 function App() {
   const { user, loading, logout } = useAuth();
+  const { show } = useModal();
   const [view, setView] = useState<'lobby' | 'dashboard' | 'create'>('lobby');
   const [poolId, setPoolId] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
@@ -82,8 +83,6 @@ function App() {
   };
 
   const handleFindPool = async (code: string) => {
-    const { show } = useModal();
-    
     if (!code) return show("Por favor ingresa un código", "error");
   
     try {

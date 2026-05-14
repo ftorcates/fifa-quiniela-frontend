@@ -37,6 +37,7 @@ export const PredictionForm = ({ poolId, initialData, onCancel, readOnly = false
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
+  const { show } = useModal();
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -104,7 +105,6 @@ export const PredictionForm = ({ poolId, initialData, onCancel, readOnly = false
   };
 
   const handleAction = async (newStatus: 'APPROVED' | 'REJECTED') => {
-    const { show } = useModal();
     try {
       await api.patch(`/tickets/${initialData.id}/status`, { status: newStatus });
       show(`Ticket ${newStatus === 'APPROVED' ? 'aprobado' : 'rechazado'} con éxito`, "success");
@@ -117,7 +117,6 @@ export const PredictionForm = ({ poolId, initialData, onCancel, readOnly = false
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { show } = useModal();
     
     // Validación proactiva: Buscar si falta algún partido en cualquier fase
     const incompleteMatch = matches.find(m => 
