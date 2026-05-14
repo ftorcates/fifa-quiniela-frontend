@@ -36,7 +36,7 @@ export const PendingApprovals = ({ poolId, onSelect }: { poolId: string, onSelec
             <div key={ticket.id} className="bg-slate-50 p-5 rounded-2xl flex justify-between items-center border border-slate-100">
               <div className="flex items-center gap-6">
                 <div>
-                    <p className="font-bold text-slate-800">{ticket.participant.name}</p>
+                    <p className="font-bold text-slate-800">{ticket.participant.displayName}</p>
                     <p className="text-xs text-slate-500">{ticket.participant.email}</p>
                 </div>
                 {/* ID de la Predicción (Añadido) */}
