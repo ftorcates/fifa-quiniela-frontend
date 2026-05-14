@@ -172,6 +172,11 @@ function App() {
                     className="flex-1 bg-slate-50 border-2 border-transparent p-4 rounded-xl outline-none focus:bg-white focus:border-amber-500 transition-all font-mono"
                     value={joinCode}
                     onChange={(e) => setJoinCode(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        handleFindPool(joinCode);
+                      }
+                    }}
                   />
                   <button onClick={() => handleFindPool(joinCode)} className="bg-amber-500 text-white p-4 rounded-xl font-bold hover:bg-amber-600 transition-all">
                     Entrar
