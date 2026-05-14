@@ -35,7 +35,6 @@ export const CreatePoolForm = ({ onSuccess, onBack }: CreatePoolFormProps) => {
         id: response.data.id,
         shortCode: response.data.shortCode 
       });
-      show("¡Quiniela creada exitosamente! Comparte el código con los participantes.", "success");
     } catch (error) {
       console.error("Error al crear la quiniela", error);
       show("Hubo un error. Revisa que el Código Corto no esté duplicado.", "error");

@@ -41,7 +41,6 @@ export const Register = ({ onBack }: { onBack: () => void }) => {
     setLoading(true);
     try {
       await registerWithEmail(formData.email, formData.password, formData.name);
-      show("¡Registrado exitosamente! Bienvenido a Quinie-Mundial.", "success");
       // Al registrarse con éxito, el AuthContext cambia y App.tsx redirige solo
     } catch (error: any) {
       show(getFirebaseErrorMessage(error), "error");
