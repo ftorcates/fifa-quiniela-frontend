@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSimulatorData } from './hooks/useSimulatorData';
+import { useModal } from './context/ModalContext';
 import { Leaderboard } from './components/Leaderboard';
 import { PredictionForm } from './components/PredictionForm';
 import { 
@@ -81,7 +82,9 @@ function App() {
   };
 
   const handleFindPool = async (code: string) => {
-    if (!code) return alert("Por favor ingresa un código");
+    const { show } = useModal();
+    
+    if (!code) return show("Por favor ingresa un código", "error");
   
     try {
       // Llamamos al endpoint que busca por shortCode (debes tenerlo en NestJS)
@@ -91,9 +94,10 @@ function App() {
       // Si la encuentra, seteamos el ID real para el Dashboard y cambiamos la vista
       setPoolId(pool.id);
       setView('dashboard');
+      show("¡Quiniela encontrada! Bienvenido.", "success");
     } catch (error) {
       console.error(error);
-      alert("No encontramos ninguna quiniela con ese código. ¡Verifícalo!");
+      show("No encontramos ninguna quiniela con ese código. ¡Verífícalo!", "error");
     }
   };
 

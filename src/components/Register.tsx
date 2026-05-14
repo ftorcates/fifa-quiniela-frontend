@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useModal } from '../context/ModalContext';
 import { Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 
 export const Register = ({ onBack }: { onBack: () => void }) => {
   const { registerWithEmail } = useAuth();
+  const { show } = useModal();
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
@@ -12,9 +14,10 @@ export const Register = ({ onBack }: { onBack: () => void }) => {
     setLoading(true);
     try {
       await registerWithEmail(formData.email, formData.password, formData.name);
+      show("¡Registrado exitosamente! Bienvenido a Quinie-Mundial.", "success");
       // Al registrarse con éxito, el AuthContext cambia y App.tsx redirige solo
     } catch (error: any) {
-      alert(error.message || "Error al registrar usuario");
+      show(error.message || "Error al registrar usuario", "error");
     } finally {
       setLoading(false);
     }

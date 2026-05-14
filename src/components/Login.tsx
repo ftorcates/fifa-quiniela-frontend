@@ -1,5 +1,6 @@
 import { Mail, ArrowRight, Loader2, LogIn, UserPlus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useModal } from '../context/ModalContext';
 import { useState } from 'react';
 import { Register } from './Register';
 import { FcGoogle } from 'react-icons/fc';
@@ -7,6 +8,7 @@ import { FaApple } from 'react-icons/fa';
 
 export const Login = () => {
   const { loginWithGoogle, loginWithEmail } = useAuth();
+  const { show } = useModal();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
@@ -19,7 +21,7 @@ export const Login = () => {
       // El AuthContext detectará el cambio y el App.tsx hará la redirección
     } catch (error) {
       console.error("Error en login con Google:", error);
-      alert("No pudimos iniciar sesión con Google. Inténtalo de nuevo.");
+      show("No pudimos iniciar sesión con Google. Inténtalo de nuevo.", "error");
     } finally {
       setIsLoggingIn(false);
     }
@@ -29,7 +31,7 @@ export const Login = () => {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      alert('Por favor completa el email y contraseña');
+      show('Por favor completa el email y contraseña', "error");
       return;
     }
 
@@ -42,13 +44,13 @@ export const Login = () => {
       
       // Mensajes más amigables basados en el error
       if (error.code === 'auth/invalid-login-credentials' || error.message?.includes('INVALID_LOGIN_CREDENTIALS')) {
-        alert('Email o contraseña incorrectos. Verifica y intenta de nuevo.');
+        show('Email o contraseña incorrectos. Verifica y intenta de nuevo.', "error");
       } else if (error.code === 'auth/user-not-found') {
-        alert('Este email no está registrado. ¿Deseas registrarte?');
+        show('Este email no está registrado. ¿Deseas registrarte?', "error");
       } else if (error.code === 'auth/wrong-password') {
-        alert('Contraseña incorrecta. Intenta de nuevo.');
+        show('Contraseña incorrecta. Intenta de nuevo.', "error");
       } else {
-        alert(error.message || "No pudimos iniciar sesión. Intenta de nuevo.");
+        show(error.message || "No pudimos iniciar sesión. Intenta de nuevo.", "error");
       }
     } finally {
       setIsLoggingIn(false);
